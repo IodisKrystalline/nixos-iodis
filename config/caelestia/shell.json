@@ -1,0 +1,82 @@
+{
+    "appearance": {
+        "transparency": {
+            "enabled": false
+        }
+    },
+    "bar": {
+        "persistent": false,
+        "popouts": {
+            "statusIcons": true,
+            "tray": true
+        },
+        "showOnHover": true,
+        "status": {
+            "showBattery": true,
+            "showLockStatus": false
+        },
+        "tray": {
+            "background": false,
+            "compact": true,
+            "recolour": false
+        }
+    },
+    "general": {
+        "apps": {
+            "terminal": [
+                "kitty"
+            ]
+        }
+    },
+    "paths": {
+        "wallpaperDir": "~/Pictures/Wallpapers"
+    },
+    "services": {
+        "useFahrenheit": false
+    },
+    "sidebar": {
+        "dragThreshold": 80,
+        "enabled": true
+    },
+    "utilities": {
+        "cards": {
+            "quickToggles": true
+        },
+        "quickToggles": [
+            {
+                "enabled": false,
+                "id": "wifi"
+            },
+            {
+                "enabled": false,
+                "id": "bluetooth"
+            },
+            {
+                "enabled": false,
+                "id": "mic"
+            },
+            {
+                "enabled": true,
+                "id": "settings"
+            },
+            {
+                "enabled": false,
+                "id": "gameMode"
+            },
+            {
+                "enabled": false,
+                "id": "dnd"
+            },
+            {
+                "enabled": false,
+                "id": "vpn"
+            }
+        ],
+        "toasts": {
+            "capsLockChanged": false,
+            "kbLayoutChanged": false,
+            "numLockChanged": false,
+            "vpnChanged": true
+        }
+    }
+}
