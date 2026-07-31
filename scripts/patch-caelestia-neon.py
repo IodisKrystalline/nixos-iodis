@@ -39,7 +39,7 @@ PATCH = {
 
     # Sub: Neon Purple
     "secondary":              "8A2BE2",
-    "onSecondary":            "FFFFFF",
+    "onSecondary":            "E6D6FF",
     "secondaryContainer":     "4B0082",
     "onSecondaryContainer":   "E6D6FF",
     "secondaryFixed":         "A855F7",
@@ -48,12 +48,12 @@ PATCH = {
     "onSecondaryFixedVariant":"4B0082",
 
     # Text khac: Lavender
-    "tertiary":               "E6E6FA",
+    "tertiary":               "FFB3D9",
     "onTertiary":              "2A0038",
     "tertiaryContainer":       "C8A2FA",
     "onTertiaryContainer":     "2A0038",
-    "tertiaryFixed":           "F0E6FF",
-    "tertiaryFixedDim":        "E6E6FA",
+    "tertiaryFixed":           "FFB3D9",
+    "tertiaryFixedDim":        "C9A0FF",
     "onTertiaryFixed":         "2A0038",
     "onTertiaryFixedVariant":  "4B0082",
 }

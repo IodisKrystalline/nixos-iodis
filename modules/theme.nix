@@ -6,24 +6,17 @@
     adwaita-icon-theme
     gnome-themes-extra
     gtk-engine-murrine
-
-    (catppuccin-gtk.override {
-      accents = [ "pink" ];
-      variant = "mocha";
-    })
+    dracula-theme # Đã đổi từ catppuccin sang dracula
   ];
 
   gtk = {
     enable = true;
     theme = {
-      name = "catppuccin-mocha-pink-standard";
-      package = pkgs.catppuccin-gtk.override {
-        accents = [ "pink" ];
-        variant = "mocha";
-      };
+      name = "Dracula";
+      package = pkgs.dracula-theme;
     };
 
-    iconTheme.name = "besgnulinux-mono-pink"; # phải khớp Y HỆT dòng Name= trong index.theme
+    iconTheme.name = "besgnulinux-mono-pink";
 
     cursorTheme = {
       name = "Adwaita";

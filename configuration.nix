@@ -44,9 +44,22 @@
     getty.autologinUser = "iodis";
     udisks2.enable = true;
     gvfs.enable = true;   # mount USB/ổ đĩa tự động cho Thunar
-    upower.enable = true; # bắt buộc, thiếu sẽ làm caelestia-shell báo lỗi UPower
+    upower = {
+      enable = true;
+      percentageLow = 25;
+      percentageCritical = 20;
+      percentageAction = 5;
+    };
+    power-profiles-daemon.enable = true;
   };
   systemd.services."getty@tty1".serviceConfig.Restart = "always";
+
+  security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định (không phải USB rời)
+
+  # --- QEMU/KVM + virt-manager ---
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true; # redirect USB thật vào VM
+  programs.virt-manager.enable = true;
 
   # --- Hyprland ---
   programs.hyprland = {
@@ -80,8 +93,8 @@
     micro vim vscode-fhs git wget
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
-    uwsm hyprpicker hyprshot hyprcursor hyprland-qt-support # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
-    wireplumber brightnessctl ntfs3g imv vlc
+    uwsm hyprpicker hyprshot hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
+    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard
   ];
   security.pam.services.quickshell = {};
 

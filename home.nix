@@ -8,6 +8,7 @@ let
     uwsm = "uwsm";
     caelestia = "caelestia"; # symlink ra file thật để GUI settings caelestia ghi đè được
     fastfetch = "fastfetch";
+    micro = "micro";
   };
 in
 {
@@ -27,7 +28,7 @@ in
 
     shellAliases = {
       nixos-rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
-      caelestia-neon = "caelestia scheme set -n catppuccin -f mocha -m dark && python3 /etc/nixos/scripts/patch-caelestia-neon.py && sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
+      caelestia-neon = "caelestia scheme set -n dracula -m dark && python3 /etc/nixos/scripts/patch-caelestia-neon.py && sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
     };
 
     interactiveShellInit = ''
