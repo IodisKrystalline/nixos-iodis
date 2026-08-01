@@ -57,7 +57,15 @@
   security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định (không phải USB rời)
 
   # --- QEMU/KVM + virt-manager ---
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    onBoot = "ignore";
+    # Tự động kích hoạt card mạng default khi daemon libvirtd khởi động
+    extraConfig = ''
+      auth_unix_ro = "none"
+      auth_unix_rw = "none"
+    '';
+  };
   virtualisation.spiceUSBRedirection.enable = true; # redirect USB thật vào VM
   programs.virt-manager.enable = true;
 
@@ -94,7 +102,7 @@
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
     uwsm hyprpicker hyprshot hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
-    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard
+    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard libnotify upower
   ];
   security.pam.services.quickshell = {};
 

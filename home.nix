@@ -160,6 +160,27 @@ in
     cli.enable = true;
   };
 
+  # --- Battery nag (nhắc pin yếu lặp lại tới khi cắm sạc) ---
+  systemd.user.services.battery-nag = {
+    Unit = {
+      Description = "Nhắc cắm sạc khi pin yếu";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "/etc/nixos/scripts/battery-nag.sh";
+    };
+  };
+
+  systemd.user.timers.battery-nag = {
+    Unit.Description = "Timer cho battery-nag";
+    Timer = {
+      OnStartupSec = "10s";
+      OnUnitActiveSec = "30s";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
+
   home.packages = with pkgs; [
     ripgrep nil nixpkgs-fmt nodejs gcc python3
     (pkgs.writeShellApplication {

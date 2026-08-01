@@ -1,2 +1,3 @@
 config/micro/backups/
 config/micro/buffers/
+hardware-configuration.nix
