@@ -101,8 +101,8 @@
     micro vim vscode-fhs git wget
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
-    uwsm hyprpicker hyprshot hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
-    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard libnotify upower
+    uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
+    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard libnotify upower grimblast grim slurp
   ];
   security.pam.services.quickshell = {};
 

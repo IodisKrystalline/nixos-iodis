@@ -74,11 +74,11 @@
             "type": "battery"
         },
         
-        {
-            "key": "{##BC13FE}{$2}{#31}󰩟 network  ",
-            "type": "wifi",
-            "format": "{ssid}"
-        },
+//        {
+//            "key": "{##BC13FE}{$2}{#31}󰩟 network  ",
+//            "type": "wifi",
+//            "format": "{ssid}"
+//        },
         {
             "format": "{#1}{##BC13FE}╠{$1}╣",
             "type": "custom"

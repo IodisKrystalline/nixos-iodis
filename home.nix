@@ -9,6 +9,8 @@ let
     caelestia = "caelestia"; # symlink ra file thật để GUI settings caelestia ghi đè được
     fastfetch = "fastfetch";
     micro = "micro";
+    yazi = "yazi";
+    cava = "cava";
   };
 in
 {
@@ -21,6 +23,11 @@ in
   home.homeDirectory = "/home/iodis";
   home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
+
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
+  };
 
   # --- Fish ---
   programs.fish = {
@@ -63,7 +70,7 @@ in
     settings = {
       foreground = "#FF10F0";
       background = "#1a1a1a";
-      background_opacity = "0.7";
+      background_opacity = "0.5";
       cursor = "#FF10F0";
       color0 = "#1a1a1a";  color1 = "#ff5555";  color2 = "#50fa7b";  color3 = "#f1fa8c";
       color4 = "#bd93f9";  color5 = "#ff79c6";  color6 = "#8be9fd";  color7 = "#f8f8f2";
@@ -76,73 +83,135 @@ in
     enable = true;
     enableFishIntegration = true;
     settings = {
-      "$schema" = "https://starship.rs/config-schema.json";
-      command_timeout = 2000;
-      format = "[](fg:color_bg1)$os$username$hostname[ ](fg:color_bg1 bg:color_bg2)$directory[ ](fg:color_bg2 bg:color_bg3)$git_branch$git_status[ ](fg:color_bg3 bg:color_bg4)$cmd_duration$time[ ](fg:color_bg4)\n$character";
-      palette = "neon_cyber";
-      palettes.neon_cyber = {
-        color_bg1 = "#5E00A3";
-        color_bg2 = "#8A2BE2";
-        color_bg3 = "#FF10F0";
-        color_bg4 = "#2A0038";
-        color_text = "#FFFFFF";
-        color_err = "#FF0000";
-      };
+      add_newline = false;
+      continuation_prompt = "[▸▹ ](dimmed white)";
+
+      format = "($nix_shell$fill$git_metrics\n)$cmd_duration$hostname$localip$shlvl$shell$env_var$jobs$sudo$username$character";
+      right_format = "$directory$vcsh$fossil_branch$git_branch$git_commit$git_state$git_status$hg_branch$pijul_channel$custom$status$os$battery$time";
+
+      fill.symbol = " ";
+
       character = {
-        error_symbol = "[❯](bold color_err)";
-        success_symbol = "[❯](bold color_bg3)";
+        format = "$symbol ";
+        success_symbol = "[◎](bold italic bright-yellow)";
+        error_symbol = "[○](italic purple)";
+        vimcmd_symbol = "[■](italic dimmed green)";
+        vimcmd_replace_one_symbol = "◌";
+        vimcmd_replace_symbol = "□";
+        vimcmd_visual_symbol = "▼";
       };
-      os = {
-        disabled = false;
+
+      env_var.VIMSHELL = {
+        format = "[$env_value]($style)";
+        style = "green italic";
+      };
+
+      sudo = {
         format = "[$symbol]($style)";
-        style = "bg:color_bg1 fg:color_text";
-        symbols.NixOS = " ";
-      };
-      username = {
+        style = "bold italic bright-purple";
+        symbol = "⋈┈";
         disabled = false;
-        show_always = true;
-        format = "[$user]($style)";
-        style_root = "bold bg:color_bg1 fg:color_err";
-        style_user = "bold bg:color_bg1 fg:color_text";
       };
-      hostname = {
-        ssh_only = false;
-        format = "[@$hostname]($style)";
-        style = "bg:color_bg1 fg:color_text";
+
+      username = {
+        style_user = "bright-yellow bold italic";
+        style_root = "purple bold italic";
+        format = "[⭘ $user]($style) ";
+        disabled = false;
+        show_always = false;
       };
+
       directory = {
-        style = "bg:color_bg2 fg:color_text";
-        format = "[$path]($style)";
-        truncation_length = 3;
-        truncation_symbol = "…/";
-        substitutions = {
-          "Documents" = "󰈙 ";
-          "Downloads" = " ";
-          "Music" = " ";
-          "Pictures" = " ";
-        };
+        home_symbol = "⌂";
+        truncation_length = 2;
+        truncation_symbol = "□ ";
+        read_only = " ◈";
+        use_os_path_sep = true;
+        style = "italic blue";
+        format = "[$path]($style)[$read_only]($read_only_style)";
+        repo_root_style = "bold blue";
+        repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [△](bold bright-blue)";
       };
-      git_branch = {
-        symbol = "";
-        style = "bg:color_bg3 fg:color_text";
-        format = "[$symbol $branch]($style)";
-      };
-      git_status = {
-        ahead = "⇡\${count}";
-        behind = "⇣\${count}";
-        deleted = "";
-        diverged = "⇕⇡\${ahead_count}⇣\${behind_count}";
-        format = "[( $all_status$ahead_behind)]($style)";
-        style = "bold bg:color_bg3 fg:color_text";
-      };
+
       cmd_duration = {
-        format = "[ ⏱ $duration ](bg:color_bg4 fg:color_text)";
-        min_time = 500;
+        min_time = 0;
+        format = "[◄ $duration ](italic white)";
       };
+
+      jobs = {
+        format = "[$symbol$number]($style) ";
+        style = "white";
+        symbol = "[▶](blue italic)";
+      };
+
+      localip = {
+        ssh_only = true;
+        format = " ◯[$localipv4](bold magenta)";
+        disabled = false;
+      };
+
       time = {
         disabled = false;
-        format = "[  $time ](bg:color_bg4 fg:color_text)";
-        time_format = "%H:%M";
+        format = "[ $time]($style)";
+        time_format = "%R";
+        utc_time_offset = "local";
+        style = "italic dimmed white";
+      };
+
+      battery = {
+        format = "[ $percentage $symbol]($style)";
+        full_symbol = "█";
+        charging_symbol = "[↑](italic bold green)";
+        discharging_symbol = "↓";
+        unknown_symbol = "░";
+        empty_symbol = "▃";
+        display = [
+          { threshold = 20; style = "italic bold red"; }
+          { threshold = 60; style = "italic dimmed bright-purple"; }
+          { threshold = 70; style = "italic dimmed yellow"; }
+        ];
+      };
+
+      git_branch = {
+        format = " [$branch(:$remote_branch)]($style)";
+        symbol = "[△](bold italic bright-blue)";
+        style = "italic bright-blue";
+        truncation_symbol = "⋯";
+        truncation_length = 11;
+        ignore_branches = [ "main" "master" ];
+        only_attached = true;
+      };
+
+      git_metrics = {
+        format = "([▴\$added]($added_style))([▿\$deleted]($deleted_style))";
+        added_style = "italic dimmed green";
+        deleted_style = "italic dimmed red";
+        ignore_submodules = true;
+        disabled = false;
+      };
+
+      git_status = {
+        style = "bold italic bright-blue";
+        format = "([⎪\$ahead_behind\$staged\$modified\$untracked\$renamed\$deleted\$conflicted\$stashed⎥]($style))";
+        conflicted = "[◪◦](italic bright-magenta)";
+        ahead = "[▴│[\${count}](bold white)│](italic green)";
+        behind = "[▿│[\${count}](bold white)│](italic red)";
+        diverged = "[◇ ▴┤[\${ahead_count}](regular white)│▿┤[\${behind_count}](regular white)│](italic bright-magenta)";
+        untracked = "[◌◦](italic bright-yellow)";
+        stashed = "[◃◈](italic white)";
+        modified = "[●◦](italic yellow)";
+        staged = "[▪┤[\$count](bold white)│](italic bright-cyan)";
+        renamed = "[◎◦](italic bright-blue)";
+        deleted = "[✕](italic red)";
+      };
+
+      nix_shell = {
+        style = "bold italic dimmed blue";
+        symbol = "✶";
+        format = "[\$symbol nix⎪\$state⎪]($style) [\$name](italic dimmed white)";
+        impure_msg = "[⌽](bold dimmed red)";
+        pure_msg = "[⌾](bold dimmed green)";
+        unknown_msg = "[◌](bold dimmed yellow)";
       };
     };
   };
@@ -176,7 +245,7 @@ in
     Unit.Description = "Timer cho battery-nag";
     Timer = {
       OnStartupSec = "10s";
-      OnUnitActiveSec = "30s";
+      OnUnitActiveSec = "10s";
     };
     Install.WantedBy = [ "graphical-session.target" ];
   };
