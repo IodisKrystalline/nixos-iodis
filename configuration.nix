@@ -98,7 +98,7 @@
   # --- System Packages ---
   environment.systemPackages = with pkgs; [
     kitty alacritty fish btop fastfetch cava cmatrix peaclock terminal-toys snowmachine
-    micro vim vscode-fhs git wget
+    micro vim git wget
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
     uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
