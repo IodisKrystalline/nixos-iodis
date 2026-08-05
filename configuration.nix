@@ -106,6 +106,11 @@
   ];
   security.pam.services.quickshell = {};
 
+  hardware.bluetooth = {
+  enable = true;
+  powerOnBoot = false;
+  };
+
   # --- Nix Config ---
   nixpkgs.config.allowUnfree = true;
   nix = {

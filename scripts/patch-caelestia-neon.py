@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
 Patch mau Neon Pink/Purple/Lavender + nen den tim than vao scheme.json
-cua caelestia. Chi dong vao nhom primary/secondary/tertiary (Main/Sub/Text)
-va nhom background/surface* (nen dashboard/widget), giu nguyen cac key
-con lai (outline, term*, ...) tu scheme nen (catppuccin/mocha).
+cua caelestia. Dong vao 4 nhom: nen (background/surface*), accent
+(primary/secondary/tertiary), text mac dinh (onBackground/onSurface/
+outline + cac alias ten Catppuccin: text/subtext/overlay), giu nguyen
+cac key con lai (term*, klink, ...) tu scheme nen (catppuccin/mocha).
 
 Chay lai script nay MOI LAN sau khi ban dung `caelestia scheme set`,
 vi lenh do se ghi de scheme.json ve nguyen ban goc.
@@ -24,6 +25,18 @@ PATCH = {
     "surfaceContainer":        "1B0027",
     "surfaceContainerHigh":    "22002F",
     "surfaceContainerHighest": "2A0038",
+
+    "onBackground":            "FFB3D9",
+    "onSurface":               "FFB3D9",
+    "onSurfaceVariant":        "C9A0FF",
+    "outline":                 "C9A0FF",
+    "outlineVariant":          "8A2BE2",
+    "text":                    "FFB3D9",
+    "subtext1":                "E8A8C8",
+    "subtext0":                "C9A0FF",
+    "overlay2":                "A78BC9",
+    "overlay1":                "8B6FA8",
+    "overlay0":                "6B5285",
 
     # Main: Neon Pink
     "primary":               "FF10F0",
@@ -47,7 +60,7 @@ PATCH = {
     "onSecondaryFixed":       "FFFFFF",
     "onSecondaryFixedVariant":"4B0082",
 
-    # Text khac: Lavender
+    # Text khac: Pastel
     "tertiary":               "FFB3D9",
     "onTertiary":              "2A0038",
     "tertiaryContainer":       "C8A2FA",

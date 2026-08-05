@@ -1,7 +1,9 @@
 {
     "appearance": {
         "transparency": {
-            "enabled": false
+            "base": 0.6,
+            "enabled": false,
+            "layers": 0.3
         }
     },
     "bar": {
