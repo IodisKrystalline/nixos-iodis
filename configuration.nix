@@ -35,7 +35,6 @@
   users.users.iodis = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    packages = with pkgs; [ tree ];
     shell = pkgs.fish;
   };
   programs.fish.enable = true;
@@ -47,8 +46,9 @@
     upower = {
       enable = true;
       percentageLow = 25;
-      percentageCritical = 20;
-      percentageAction = 5;
+      percentageCritical = 5;
+      percentageAction = 3;
+      criticalPowerAction = "PowerOff";
     };
     power-profiles-daemon.enable = true;
   };
@@ -98,11 +98,11 @@
   # --- System Packages ---
   environment.systemPackages = with pkgs; [
     kitty alacritty fish btop fastfetch cava cmatrix peaclock terminal-toys snowmachine
-    micro vim git wget
+    micro vim git wget vscodium
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
     uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
-    wireplumber brightnessctl ntfs3g imv vlc wl-clipboard libnotify upower grimblast grim slurp
+    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast grim slurp
   ];
   security.pam.services.quickshell = {};
 

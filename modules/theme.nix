@@ -42,10 +42,12 @@
     gtk4.extraCss = config.gtk.gtk3.extraCss;
   };
 
-  xdg.configFile."gtk-3.0/gtk.css".force = true;
-  xdg.configFile."gtk-4.0/gtk.css".force = true;
-  xdg.configFile."gtk-3.0/settings.ini".force = true;
-  xdg.configFile."gtk-4.0/settings.ini".force = true;
+  xdg.configFile = {
+    "gtk-3.0/gtk.css".force = true;
+    "gtk-4.0/gtk.css".force = true;
+    "gtk-3.0/settings.ini".force = true;
+    "gtk-4.0/settings.ini".force = true;
+  };
 
   xdg.dataFile."icons/besgnulinux-mono-pink".source =
   config.lib.file.mkOutOfStoreSymlink "/etc/nixos/assets/besgnulinux-mono-pink";
