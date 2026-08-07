@@ -60,20 +60,7 @@
   };
   security.rtkit.enable = true; # cần cho pipewire quản lý realtime scheduling
   systemd.services."getty@tty1".serviceConfig.Restart = "always";
-
   security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định
-
-  # --- QEMU/KVM + virt-manager ---
-  virtualisation.libvirtd = {
-    enable = true;
-    onBoot = "ignore";
-    extraConfig = ''
-      auth_unix_ro = "none"
-      auth_unix_rw = "none"
-    ''; # tự kích hoạt card mạng default khi daemon khởi động
-  };
-  virtualisation.spiceUSBRedirection.enable = true; # redirect USB thật vào VM
-  programs.virt-manager.enable = true;
 
   # --- Hyprland ---
   programs.hyprland = {
