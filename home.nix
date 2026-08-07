@@ -17,9 +17,6 @@ in
   home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
 
-  programs.java.enable = true;
-  programs.java.package = pkgs.jdk21; # cho Prism Launcher
-
   programs.fish = {
     enable = true;
     shellAliases = {
@@ -197,13 +194,6 @@ in
       terminal = false; # tự bọc kitty trong Exec rồi
       categories = [ "Utility" "TextEditor" ];
       mimeType = [ "text/plain" ];
-    };
-    prismlauncher = {
-      name = "Prism Launcher";
-      genericName = "Minecraft";
-      exec = "nix-shell -p appimage-run --run \"appimage-run /home/iodis/Downloads/PrismLauncher.AppImage\"";
-      terminal = false;
-      categories = [ "Game" ];
     };
   };
 
