@@ -1,3 +1,9 @@
+hardware-configuration.nix
+result
+result-*
+.direnv/
 config/micro/backups/
 config/micro/buffers/
-hardware-configuration.nix
+*.swp
+*~
+.DS_Store

@@ -2,18 +2,10 @@
 
 let
   dotfiles = "/etc/nixos/config";
-  create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
-  configs = {
-    hypr = "hypr";
-    uwsm = "uwsm";
-    caelestia = "caelestia"; # symlink ra file thật để GUI settings caelestia ghi đè được
-    fastfetch = "fastfetch";
-    micro = "micro";
-    yazi = "yazi";
-    cava = "cava";
-  };
+  # Tên thư mục con trong ${dotfiles} = tên đích trong ~/.config, symlink ra
+  # file thật (không phải store) để GUI settings (VD caelestia) ghi đè được.
+  dotfileNames = [ "hypr" "uwsm" "caelestia" "fastfetch" "micro" "yazi" "cava" ];
 in
-
 {
   imports = [
     ./modules/theme.nix
@@ -25,10 +17,8 @@ in
   home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
 
-  programs.java = {
-    enable = true;
-    package = pkgs.jdk21;
-  };
+  programs.java.enable = true;
+  programs.java.package = pkgs.jdk21; # cho Prism Launcher
 
   programs.fish = {
     enable = true;
@@ -79,16 +69,8 @@ in
         vimcmd_replace_symbol = "□";
         vimcmd_visual_symbol = "▼";
       };
-      env_var.VIMSHELL = {
-        format = "[$env_value]($style)";
-        style = "green italic";
-      };
-      sudo = {
-        format = "[$symbol]($style)";
-        style = "bold italic bright-purple";
-        symbol = "⋈┈";
-        disabled = false;
-      };
+      env_var.VIMSHELL = { format = "[$env_value]($style)"; style = "green italic"; };
+      sudo = { format = "[$symbol]($style)"; style = "bold italic bright-purple"; symbol = "⋈┈"; disabled = false; };
       username = {
         style_user = "bright-yellow bold italic";
         style_root = "purple bold italic";
@@ -107,27 +89,10 @@ in
         repo_root_style = "bold blue";
         repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [△](bold bright-blue)";
       };
-      cmd_duration = {
-        min_time = 0;
-        format = "[◄ $duration ](italic white)";
-      };
-      jobs = {
-        format = "[$symbol$number]($style) ";
-        style = "white";
-        symbol = "[▶](blue italic)";
-      };
-      localip = {
-        ssh_only = true;
-        format = " ◯[$localipv4](bold magenta)";
-        disabled = false;
-      };
-      time = {
-        disabled = false;
-        format = "[ $time]($style)";
-        time_format = "%R";
-        utc_time_offset = "local";
-        style = "italic dimmed white";
-      };
+      cmd_duration = { min_time = 0; format = "[◄ $duration ](italic white)"; };
+      jobs = { format = "[$symbol$number]($style) "; style = "white"; symbol = "[▶](blue italic)"; };
+      localip = { ssh_only = true; format = " ◯[$localipv4](bold magenta)"; disabled = false; };
+      time = { disabled = false; format = "[ $time]($style)"; time_format = "%R"; utc_time_offset = "local"; style = "italic dimmed white"; };
       battery = {
         format = "[ $percentage $symbol]($style)";
         full_symbol = "█";
@@ -182,36 +147,28 @@ in
     };
   };
 
-  # KHÔNG dùng `settings = {...}`: sẽ biến ~/.config/caelestia/shell.json thành
-  # symlink chỉ đọc, GUI settings không ghi đè được. Dùng symlink ra file thật
-  # ở "configs.caelestia" bên trên thay thế.
+  # KHÔNG dùng `settings = {...}` ở đây: sẽ biến shell.json thành symlink
+  # store (read-only), GUI settings caelestia không ghi đè được. Symlink ra
+  # file thật đã xử lý qua dotfileNames/xdg.configFile bên dưới.
   programs.caelestia = {
     enable = true;
-    systemd = {
-      enable = true;
-      target = "graphical-session.target";
-    };
+    systemd.enable = true;
+    systemd.target = "graphical-session.target";
     cli.enable = true;
   };
 
-  # Battery nag
   systemd.user.services.battery-nag = {
-    Unit = {
-      Description = "Nhắc cắm sạc khi pin yếu";
-      After = [ "graphical-session.target" ];
-    };
+    Unit.Description = "Nhắc cắm sạc khi pin yếu";
+    Unit.After = [ "graphical-session.target" ];
     Service = {
       Type = "oneshot";
       ExecStart = "/etc/nixos/scripts/battery-nag.sh";
     };
   };
-
   systemd.user.timers.battery-nag = {
     Unit.Description = "Timer cho battery-nag";
-    Timer = {
-      OnStartupSec = "30s";
-      OnUnitActiveSec = "30s";
-    };
+    Timer.OnStartupSec = "30s";
+    Timer.OnUnitActiveSec = "30s";
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
@@ -223,16 +180,16 @@ in
       text = ''exec nix-search-tv "$@"'';
     })
   ];
-  
+
   home.activation.cleanBrokenSymlinks = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     $DRY_RUN_CMD find "$HOME/.config" -xtype l -delete 2>/dev/null || true
   '';
 
-  xdg.configFile = builtins.mapAttrs
-    (name: subpath: { source = create_symlink "${dotfiles}/${subpath}"; })
-    configs;
+  xdg.configFile = lib.genAttrs dotfileNames (name: {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${name}";
+  });
 
-  xdg.desktopEntries = { 
+  xdg.desktopEntries = {
     micro-kitty = {
       name = "Micro (kitty)";
       genericName = "Text Editor";

@@ -42,29 +42,35 @@
   services = {
     getty.autologinUser = "iodis";
     udisks2.enable = true;
-    gvfs.enable = true;   # mount USB/ổ đĩa tự động cho Thunar
+    gvfs.enable = true; # mount USB/ổ đĩa tự động cho Thunar
+    power-profiles-daemon.enable = true;
     upower = {
       enable = true;
       percentageLow = 25;
       percentageCritical = 5;
       percentageAction = 3;
-      criticalPowerAction = "PowerOff";
+      criticalPowerAction = "PowerOff"; # không có swap -> không dùng Hibernate/HybridSleep
     };
-    power-profiles-daemon.enable = true;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      pulse.enable = true;
+      wireplumber.enable = true;
+    };
   };
+  security.rtkit.enable = true; # cần cho pipewire quản lý realtime scheduling
   systemd.services."getty@tty1".serviceConfig.Restart = "always";
 
-  security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định (không phải USB rời)
+  security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định
 
   # --- QEMU/KVM + virt-manager ---
   virtualisation.libvirtd = {
     enable = true;
     onBoot = "ignore";
-    # Tự động kích hoạt card mạng default khi daemon libvirtd khởi động
     extraConfig = ''
       auth_unix_ro = "none"
       auth_unix_rw = "none"
-    '';
+    ''; # tự kích hoạt card mạng default khi daemon khởi động
   };
   virtualisation.spiceUSBRedirection.enable = true; # redirect USB thật vào VM
   programs.virt-manager.enable = true;
@@ -77,16 +83,12 @@
   };
 
   # --- Fcitx5 (bộ gõ Tiếng Việt) ---
-  # Không set GTK_IM_MODULE: Hyprland/Wayland tự dùng text-input-v3, set thêm gây warning thừa
+  # Không set GTK_IM_MODULE: Hyprland/Wayland tự dùng text-input-v3, set thêm gây warning thừa.
   # QT_IM_MODULE vẫn cần vì Qt5 chạy qua XWayland.
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      qt6Packages.fcitx5-unikey
-      fcitx5-gtk
-      kdePackages.fcitx5-qt
-    ];
+    fcitx5.addons = with pkgs; [ qt6Packages.fcitx5-unikey fcitx5-gtk kdePackages.fcitx5-qt ];
   };
   environment.sessionVariables = {
     QT_IM_MODULE = "fcitx";
@@ -97,18 +99,25 @@
 
   # --- System Packages ---
   environment.systemPackages = with pkgs; [
-    kitty alacritty fish btop fastfetch cava cmatrix peaclock terminal-toys snowmachine
+    # Terminal & shell
+    kitty alacritty fish btop fastfetch
+    # Terminal toys
+    cava cmatrix peaclock terminal-toys snowmachine pipes
+    # Editor & dev
     micro vim git wget vscodium
+    # Browser & file manager
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
-    uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent # bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm
+    # Hyprland ecosystem (bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm)
+    uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent
+    # Audio/screenshot/utility
     wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast grim slurp
   ];
   security.pam.services.quickshell = {};
 
   hardware.bluetooth = {
-  enable = true;
-  powerOnBoot = false;
+    enable = true;
+    powerOnBoot = false;
   };
 
   # --- Nix Config ---
