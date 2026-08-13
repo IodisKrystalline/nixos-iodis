@@ -2,7 +2,7 @@
     "appearance": {
         "transparency": {
             "base": 0.6,
-            "enabled": false,
+            "enabled": true,
             "layers": 0.3
         }
     },

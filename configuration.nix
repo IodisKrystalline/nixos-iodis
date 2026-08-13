@@ -3,9 +3,8 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
-  # --- Bootloader ---
+  # --- Boot ---
   boot.loader = {
-    systemd-boot.enable = false;
     efi.canTouchEfiVariables = true;
     timeout = 5;
     grub = {
@@ -25,31 +24,37 @@
     };
   };
   boot.supportedFilesystems = [ "ntfs" ];
+  boot.kernelModules = [ "tcp_bbr" ];
+  boot.kernel.sysctl = {
+    "net.core.default_qdisc" = "fq";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+  };
 
   # --- Networking & Localization ---
   networking.hostName = "iodis-nix";
   networking.networkmanager.enable = true;
   time.timeZone = "Asia/Ho_Chi_Minh";
 
-  # --- User & Services ---
+  # --- Users & Shell ---
   users.users.iodis = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "gamemode" ];
     shell = pkgs.fish;
   };
   programs.fish.enable = true;
 
+  # --- Core Services ---
   services = {
     getty.autologinUser = "iodis";
     udisks2.enable = true;
-    gvfs.enable = true; # mount USB/ổ đĩa tự động cho Thunar
+    gvfs.enable = true;
     power-profiles-daemon.enable = true;
     upower = {
       enable = true;
       percentageLow = 25;
       percentageCritical = 5;
       percentageAction = 3;
-      criticalPowerAction = "PowerOff"; # không có swap -> không dùng Hibernate/HybridSleep
+      criticalPowerAction = "PowerOff";
     };
     pipewire = {
       enable = true;
@@ -57,22 +62,22 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
+    thermald.enable = true;
+    flatpak.enable = true;
   };
-  security.rtkit.enable = true; # cần cho pipewire quản lý realtime scheduling
-  systemd.services."getty@tty1".serviceConfig.Restart = "always";
+  security.rtkit.enable = true;
+  security.polkit.enable = true;
 
-  security.polkit.enable = true; # cần để udisks2 xin quyền mount ổ đĩa cố định
-
-  # --- QEMU/KVM + virt-manager ---
+  # --- Virtualization ---
   virtualisation.libvirtd = {
     enable = true;
     onBoot = "ignore";
     extraConfig = ''
       auth_unix_ro = "none"
       auth_unix_rw = "none"
-    ''; # tự kích hoạt card mạng default khi daemon khởi động
+    '';
   };
-  virtualisation.spiceUSBRedirection.enable = true; # redirect USB thật vào VM
+  virtualisation.spiceUSBRedirection.enable = true;
   programs.virt-manager.enable = true;
 
   # --- Hyprland ---
@@ -82,9 +87,17 @@
     withUWSM = true;
   };
 
-  # --- Fcitx5 (bộ gõ Tiếng Việt) ---
-  # Không set GTK_IM_MODULE: Hyprland/Wayland tự dùng text-input-v3, set thêm gây warning thừa.
-  # QT_IM_MODULE vẫn cần vì Qt5 chạy qua XWayland.
+  # --- Gaming & Graphics ---
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vpl-gpu-rt
+    ];
+  };
+  programs.gamemode.enable = true;
+
+  # --- Input Method (Fcitx5) ---
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
@@ -95,33 +108,33 @@
     XMODIFIERS = "@im=fcitx";
   };
 
+  # --- Fonts & Packages ---
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
-  # --- System Packages ---
   environment.systemPackages = with pkgs; [
-    # Terminal & shell
+    # Terminal & tools
     kitty alacritty fish btop fastfetch
-    # Terminal toys
     cava cmatrix peaclock terminal-toys snowmachine pipes
-    # Editor & dev
+    # Editors & dev
     micro vim git wget vscodium
     # Browser & file manager
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
-    # Hyprland ecosystem (bar/wallpaper/lock/idle do caelestia-shell đảm nhiệm)
+    # Hyprland ecosystem
     uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent
-    # Audio/screenshot/utility
-    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast grim slurp
+    # Utils
+    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast
   ];
-  security.pam.services.quickshell = {};
 
+  # --- Bluetooth ---
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = false;
   };
 
-  # --- Nix Config ---
+  # --- Nix ---
   nixpkgs.config.allowUnfree = true;
+
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];

@@ -6,7 +6,6 @@
     gnome-themes-extra
     gtk-engine-murrine
     hicolor-icon-theme
-    (catppuccin-gtk.override { accents = [ "pink" ]; variant = "mocha"; })
   ];
 
   gtk = {
@@ -21,11 +20,10 @@
     };
     gtk4.theme = config.gtk.theme;
 
-    # Text mac dinh -> Neon Pink, text phu -> pastel
     gtk3.extraCss = ''
       label, entry, textview text, treeview, .title, .subtitle { color: #FF10F0; }
       .dim-label, .caption, entry placeholder, GtkPlacesSidebar { color: #FFB3D9; }
-      statusbar, .accent, GtkStatusbar { color: #C9A0FF; }
+      statusbar, .accent, GtkStatusbar { color: #8b36f9; }
     '';
     gtk4.extraCss = config.gtk.gtk3.extraCss;
   };

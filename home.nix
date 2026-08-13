@@ -2,8 +2,6 @@
 
 let
   dotfiles = "/etc/nixos/config";
-  # Tên thư mục con trong ${dotfiles} = tên đích trong ~/.config, symlink ra
-  # file thật (không phải store) để GUI settings (VD caelestia) ghi đè được.
   dotfileNames = [ "hypr" "uwsm" "caelestia" "fastfetch" "micro" "yazi" "cava" ];
 in
 {
@@ -17,14 +15,16 @@ in
   home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
 
-  programs.java.enable = true;
-  programs.java.package = pkgs.jdk21; # cho Prism Launcher
+  programs.java = {
+    enable = true;
+    package = pkgs.jdk21;
+  };
 
   programs.fish = {
     enable = true;
     shellAliases = {
       nixos-rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
-      caelestia-neon = "caelestia scheme set -n dracula -m dark && python3 /etc/nixos/scripts/patch-caelestia-neon.py && sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
+      caelestia-neon = "caelestia scheme set -n dracula -m dark; and python3 /etc/nixos/scripts/patch-caelestia-neon.py; and sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
     };
     interactiveShellInit = ''
       set -g fish_greeting ""
@@ -147,9 +147,6 @@ in
     };
   };
 
-  # KHÔNG dùng `settings = {...}` ở đây: sẽ biến shell.json thành symlink
-  # store (read-only), GUI settings caelestia không ghi đè được. Symlink ra
-  # file thật đã xử lý qua dotfileNames/xdg.configFile bên dưới.
   programs.caelestia = {
     enable = true;
     systemd.enable = true;
@@ -158,7 +155,7 @@ in
   };
 
   systemd.user.services.battery-nag = {
-    Unit.Description = "Nhắc cắm sạc khi pin yếu";
+    Unit.Description = "Pin yếu";
     Unit.After = [ "graphical-session.target" ];
     Service = {
       Type = "oneshot";
@@ -173,7 +170,7 @@ in
   };
 
   home.packages = with pkgs; [
-    ripgrep nil nixpkgs-fmt nodejs gcc python3 tree
+    ripgrep nil nixpkgs-fmt python3 tree
     (pkgs.writeShellApplication {
       name = "ns";
       runtimeInputs = with pkgs; [ fzf nix-search-tv ];
@@ -181,6 +178,7 @@ in
     })
   ];
 
+  # Xóa symlink hỏng
   home.activation.cleanBrokenSymlinks = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     $DRY_RUN_CMD find "$HOME/.config" -xtype l -delete 2>/dev/null || true
   '';
@@ -194,7 +192,7 @@ in
       name = "Micro (kitty)";
       genericName = "Text Editor";
       exec = "kitty --title micro -e micro %F";
-      terminal = false; # tự bọc kitty trong Exec rồi
+      terminal = false;
       categories = [ "Utility" "TextEditor" ];
       mimeType = [ "text/plain" ];
     };

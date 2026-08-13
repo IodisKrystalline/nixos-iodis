@@ -24,7 +24,7 @@ PATCH = {
 
     "secondary": "8A2BE2", "onSecondary": "E6D6FF", "secondaryContainer": "4B0082",
     "onSecondaryContainer": "E6D6FF", "secondaryFixed": "A855F7", "secondaryFixedDim": "8A2BE2",
-    "onSecondaryFixed": "FFFFFF", "onSecondaryFixedVariant": "4B0082",
+    "onSecondaryFixed": "2A0038", "onSecondaryFixedVariant": "4B0082",
 
     "tertiary": "FFB3D9", "onTertiary": "2A0038", "tertiaryContainer": "C8A2FA",
     "onTertiaryContainer": "2A0038", "tertiaryFixed": "FFB3D9", "tertiaryFixedDim": "C9A0FF",
