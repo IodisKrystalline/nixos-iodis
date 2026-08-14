@@ -67,6 +67,7 @@
   };
   security.rtkit.enable = true;
   security.polkit.enable = true;
+  systemd.services.libvirtd.wantedBy = lib.mkForce [];
 
   # --- Virtualization ---
   virtualisation.libvirtd = {
@@ -116,7 +117,7 @@
     kitty alacritty fish btop fastfetch
     cava cmatrix peaclock terminal-toys snowmachine pipes
     # Editors & dev
-    micro vim git wget vscodium
+    micro git wget vscodium
     # Browser & file manager
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi

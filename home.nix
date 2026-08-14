@@ -170,7 +170,7 @@ in
   };
 
   home.packages = with pkgs; [
-    ripgrep nil nixpkgs-fmt python3 tree
+    ripgrep nil nixpkgs-fmt python3 tree gcc
     (pkgs.writeShellApplication {
       name = "ns";
       runtimeInputs = with pkgs; [ fzf nix-search-tv ];
