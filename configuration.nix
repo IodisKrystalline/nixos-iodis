@@ -33,6 +33,7 @@
   # --- Networking & Localization ---
   networking.hostName = "iodis-nix";
   networking.networkmanager.enable = true;
+  systemd.services.ModemManager.enable = false;
   time.timeZone = "Asia/Ho_Chi_Minh";
 
   # --- Users & Shell ---
@@ -69,6 +70,12 @@
   security.polkit.enable = true;
   systemd.services.libvirtd.wantedBy = lib.mkForce [];
 
+  # --- Bluetooth ---
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;
+  };
+
   # --- Virtualization ---
   virtualisation.libvirtd = {
     enable = true;
@@ -84,7 +91,6 @@
   # --- Hyprland ---
   programs.hyprland = {
     enable = true;
-    xwayland.enable = true;
     withUWSM = true;
   };
 
@@ -114,7 +120,7 @@
 
   environment.systemPackages = with pkgs; [
     # Terminal & tools
-    kitty alacritty fish btop fastfetch
+    alacritty btop fastfetch
     cava cmatrix peaclock terminal-toys snowmachine pipes
     # Editors & dev
     micro git wget vscodium
@@ -126,12 +132,6 @@
     # Utils
     wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast
   ];
-
-  # --- Bluetooth ---
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = false;
-  };
 
   # --- Nix ---
   nixpkgs.config.allowUnfree = true;

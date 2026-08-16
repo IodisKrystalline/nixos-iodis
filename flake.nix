@@ -1,6 +1,4 @@
 {
-  # 1. FLAKE INPUTS
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -16,8 +14,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
-  # 2. FLAKE OUTPUTS
 
   outputs = { self, nixpkgs, home-manager, ... }@inputs: {
     nixosConfigurations.iodis-nix = nixpkgs.lib.nixosSystem {
