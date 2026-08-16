@@ -6,6 +6,12 @@
     package = pkgs.jdk21;
   };
 
+  programs.git = {
+  enable = true;
+  userName  = "iodis";
+  userEmail = "iodis@example.com";
+  };
+
   xdg.desktopEntries = {
     micro-kitty = {
       name = "Micro (kitty)";
