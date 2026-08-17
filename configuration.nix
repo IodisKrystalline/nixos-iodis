@@ -121,7 +121,7 @@
   environment.systemPackages = with pkgs; [
     # Terminal & tools
     alacritty btop fastfetch
-    cava cmatrix peaclock terminal-toys snowmachine pipes
+    cava cmatrix peaclock terminal-toys snowmachine pipes gittype
     # Editors & dev
     micro git wget vscodium
     # Browser & file manager
