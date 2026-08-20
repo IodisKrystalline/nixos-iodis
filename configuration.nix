@@ -1,5 +1,24 @@
 { config, lib, pkgs, inputs, ... }:
 
+let
+  sddm-astronaut = (pkgs.sddm-astronaut.override {
+#    embeddedTheme = "japanese_aesthetic";
+    themeConfig = {
+      HeaderTextColor = "#ff00aa";
+      Background = "Backgrounds/your-custom-background.png";
+      PartialBlur = "true";
+          BlurMax = "25";
+          Blur = "1.0";
+    };
+  }).overrideAttrs (oldAttrs: {
+    installPhase = oldAttrs.installPhase + ''
+      chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
+      cp ${./assets/background.png} \
+        $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/your-custom-background.png
+    '';
+  });
+in
+
 {
   imports = [ ./hardware-configuration.nix ];
 
