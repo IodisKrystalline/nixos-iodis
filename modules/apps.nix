@@ -8,8 +8,8 @@
 
   programs.git = {
   enable = true;
-  userName  = "iodis";
-  userEmail = "iodis@example.com";
+  settings.user.name  = "iodis";
+  settings.user.email = "iodis@example.com";
   };
 
   xdg.desktopEntries = {

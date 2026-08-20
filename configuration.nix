@@ -63,12 +63,59 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
+    displayManager.sddm = {
+      enable = true;
+      wayland = {
+        enable = true;
+        compositorCommand =
+            let
+              westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
+                libinput = {
+                  enable-tap = config.services.libinput.mouse.tapping;
+                  left-handed = config.services.libinput.mouse.leftHanded;
+                };
+                keyboard.keymap_layout = "us";
+                shell = {
+                  cursor-theme = "Adwaita";
+                  cursor-size = 24;
+                };
+              };
+            in
+            "env XCURSOR_THEME=Adwaita XCURSOR_SIZE=24 XCURSOR_PATH=/run/current-system/sw/share/icons ${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
+      };
+      theme = "sddm-astronaut-theme";
+      extraPackages = with pkgs; [ 
+        sddm-astronaut
+        kdePackages.qt5compat
+        kdePackages.qtsvg
+        kdePackages.qtwayland
+        adwaita-icon-theme
+      ];
+      settings = {
+        General = {
+          InputMethod = "";
+        };
+        Theme = {
+          CursorTheme = "Adwaita";
+          CursorSize = 24;
+          Background = "/etc/nixos/assets/background.png";
+        };
+      };
+    };
+    xserver.enable = lib.mkForce false;
     thermald.enable = true;
     flatpak.enable = true;
+    cloudflare-warp.enable = true;
+    logind.settings.Login.KillUserProcesses = true;
   };
-  security.rtkit.enable = true;
-  security.polkit.enable = true;
-  systemd.services.libvirtd.wantedBy = lib.mkForce [];
+  systemd.services = {
+    cloudflare-warp.wantedBy = lib.mkForce [];
+    libvirtd.wantedBy = lib.mkForce [];
+  };
+  security = {
+    rtkit.enable = true;
+    polkit.enable = true;
+  };
 
   # --- Bluetooth ---
   hardware.bluetooth = {
@@ -88,11 +135,12 @@
   virtualisation.spiceUSBRedirection.enable = true;
   programs.virt-manager.enable = true;
 
-  # --- Hyprland ---
+  # --- Hyprland & Niri ---
   programs.hyprland = {
     enable = true;
     withUWSM = true;
   };
+  programs.niri.enable = true;
 
   # --- Gaming & Graphics ---
   hardware.graphics = {
@@ -113,6 +161,8 @@
   environment.sessionVariables = {
     QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
+    XCURSOR_THEME = "Adwaita";
+    XCURSOR_SIZE = "24";
   };
 
   # --- Fonts & Packages ---
@@ -120,8 +170,8 @@
 
   environment.systemPackages = with pkgs; [
     # Terminal & tools
-    alacritty btop fastfetch
-    cava cmatrix peaclock terminal-toys snowmachine pipes gittype
+    alacritty btop fastfetch ttyper
+    cava cmatrix peaclock terminal-toys snowmachine pipes
     # Editors & dev
     micro git wget vscodium
     # Browser & file manager
@@ -129,8 +179,14 @@
     thunar thunar-volman yazi
     # Hyprland ecosystem
     uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent
+    # Niri ecosystem
+    noctalia-shell
+    # SDDM
+    libsForQt5.qtwayland kdePackages.qt5compat 
+    kdePackages.qtsvg sddm-astronaut kdePackages.qtwayland
     # Utils
-    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard libnotify upower grimblast
+    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard 
+    libnotify upower grimblast cloudflare-warp
   ];
 
   # --- Nix ---

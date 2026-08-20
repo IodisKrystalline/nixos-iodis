@@ -12,9 +12,6 @@
       fastfetch
     '';
     loginShellInit = ''
-      if test -z "$WAYLAND_DISPLAY" -a "$XDG_VTNR" = 1
-          exec uwsm start hyprland-uwsm.desktop
-      end
     '';
   };
 

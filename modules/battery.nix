@@ -3,7 +3,7 @@
 {
   systemd.user.services.battery-nag = {
     Unit.Description = "Pin yếu";
-    Unit.After = [ "graphical-session.target" ];
+    Unit.After = [ "default.target" ]; # chạy chung mọi session (Hyprland lẫn Niri)
     Service = {
       Type = "oneshot";
       ExecStart = "/etc/nixos/scripts/battery-nag.sh";
@@ -14,6 +14,6 @@
     Unit.Description = "Timer cho battery-nag";
     Timer.OnStartupSec = "30s";
     Timer.OnUnitActiveSec = "30s";
-    Install.WantedBy = [ "graphical-session.target" ];
+    Install.WantedBy = [ "default.target" ];
   };
 }

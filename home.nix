@@ -2,7 +2,7 @@
 
 let
   dotfiles = "/etc/nixos/config";
-  dotfileNames = [ "hypr" "uwsm" "caelestia" "fastfetch" "micro" "yazi" "cava" ];
+  dotfileNames = [ "hypr" "uwsm" "caelestia" "fastfetch" "micro" "yazi" "cava" "niri" "noctalia" ];
 in
 {
   imports = [
@@ -23,6 +23,15 @@ in
     $DRY_RUN_CMD find "$HOME/.config" -xtype l -delete 2>/dev/null || true
   '';
 
+  home.pointerCursor = {
+    enable = true;
+    name = "Adwaita";
+    package = pkgs.adwaita-icon-theme;
+    size = 24;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
   xdg.configFile = lib.genAttrs dotfileNames (name: {
     source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${name}";
   });
@@ -30,8 +39,7 @@ in
   # --- Shell ---
   programs.caelestia = {
     enable = true;
-    systemd.enable = true;
-    systemd.target = "graphical-session.target";
+    systemd.enable = false;
     cli.enable = true;
   };
 }

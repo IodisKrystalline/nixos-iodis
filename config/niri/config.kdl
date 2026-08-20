@@ -1,0 +1,234 @@
+// ==============================================================================
+// Monitor
+// ==============================================================================
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+        numlock
+    }
+    touchpad {
+        tap
+        natural-scroll
+    }
+}
+
+output "eDP-1" {
+    mode "1366x768"
+    scale 1
+}
+
+switch-events {
+    lid-close {
+        spawn "noctalia-shell" "ipc" "call" "lockScreen" "lock"
+    }
+}
+
+// ==============================================================================
+// Startup
+// ==============================================================================
+spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
+spawn-at-startup "noctalia-shell"
+
+// ==============================================================================
+// Layout & Theme
+// ==============================================================================
+layout {
+    gaps 16
+    center-focused-column "on-overflow"
+    background-color "transparent"
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.65; }
+
+    focus-ring {
+        off
+        width 4
+        active-color "#FF0066"    // Neon Pink — Main
+        inactive-color "#4B0082"  // Tím đậm — khớp tông Sub trong theme GTK/Caelestia
+    }
+
+    border {
+        off
+    }
+
+    shadow {
+        off
+        softness 30
+        spread 5
+        offset x=0 y=5
+        color "#12001A99"  // đen tím than mờ, đồng bộ nền Caelestia
+    }
+}
+
+overview {
+    backdrop-color "#12001A"
+    workspace-shadow {
+        off
+    }
+}
+
+// ==============================================================================
+// Window Rules
+// ==============================================================================
+prefer-no-csd
+
+window-rule {
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+window-rule {
+    match app-id=r#"zen-beta$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match title=r#".*(Open|Save|Select|Dialog|Properties|Preferences|Settings|Rename|Authentication).*"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"org\.gtk\.FileChooserDialog"#
+    open-floating true
+}
+
+// ==============================================================================
+// Animations
+// ==============================================================================
+animations {
+    workspace-switch {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    window-open {
+        duration-ms 200
+        curve "ease-out-quad"
+    }
+    window-close {
+        duration-ms 200
+        curve "ease-out-cubic"
+    }
+    window-movement {
+        spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+    }
+    window-resize {
+        spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+    }
+    overview-open-close {
+        spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+    }
+}
+
+cursor {
+    hide-when-typing
+    hide-after-inactive-ms 5000
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+// ==============================================================================
+// Environment
+// ==============================================================================
+environment {
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
+    XCURSOR_SIZE "10"
+
+    QT_QPA_PLATFORM "wayland"
+    QT_QPA_PLATFORMTHEME "gtk3"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+
+    GDK_BACKEND "wayland"
+    MOZ_ENABLE_WAYLAND "1"
+    SDL_VIDEODRIVER "wayland"
+    CLUTTER_BACKEND "wayland"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+
+    LIBVA_DRIVER_NAME "iHD"  // Intel media driver (intel-media-driver), khớp hardware.graphics
+}
+
+// ==============================================================================
+// Keybinds
+// ==============================================================================
+binds {
+    // --- Apps ---
+    Mod+T { spawn "kitty"; }
+    Mod+B { spawn "zen-beta"; }
+    Mod+F { spawn "thunar"; }
+    Mod+Grave { spawn-sh "noctalia-shell ipc call launcher toggle"; }
+    Mod+KP_Subtract { spawn-sh "uwsm app -- fcitx5 -d -r"; }
+    Mod+Escape { spawn-sh "noctalia-shell ipc call lockScreen lock"; }
+    Mod+P { spawn "codium"; }
+    Print { "screenshot"; }
+    Ctrl+Alt+Delete { spawn "shutdown" "now"; }
+
+    // --- Session ---
+    Mod+Shift+L { quit; }
+    Mod+Shift+Escape { show-hotkey-overlay; }
+
+    // --- Window ---
+    Mod+Q { close-window; }
+    Mod+W { toggle-window-floating; }
+    Mod+F11 { fullscreen-window; }
+    Mod+E { maximize-column; }
+
+    // --- Window Navigation ---
+    Mod+Shift+Left { move-column-left; }
+    Mod+Shift+Down { move-window-down; }
+    Mod+Shift+Up { move-window-up; }
+    Mod+Shift+Right { move-column-right; }
+
+    // --- Focus ---
+    Mod+Left { focus-column-left; }
+    Mod+Down { focus-window-down; }
+    Mod+Up { focus-window-up; }
+    Mod+Right { focus-column-right; }
+
+    // --- Workspace ---
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+0 { focus-workspace 10; }
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Shift+0 { move-column-to-workspace 10; }
+    Alt+Tab { focus-workspace-previous; }
+
+    // --- Mouse Navigation ---
+    Mod+WheelScrollDown cooldown-ms=150 { focus-column-right; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-column-left; }
+    Mod+Shift+WheelScrollDown cooldown-ms=150 { move-column-right; }
+    Mod+Shift+WheelScrollUp cooldown-ms=150 { move-column-left; }
+
+    // --- Overview ---
+    Mod+Tab hotkey-overlay-title="Open Overview" repeat=false { toggle-overview; }
+
+    // --- Media keys ---
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"; }
+    XF86AudioMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+}
