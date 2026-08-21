@@ -34,11 +34,4 @@ in
   xdg.configFile = lib.genAttrs dotfileNames (name: {
     source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${name}";
   });
-
-  # --- Shell ---
-  programs.caelestia = {
-    enable = true;
-    systemd.enable = false;
-    cli.enable = true;
-  };
 }

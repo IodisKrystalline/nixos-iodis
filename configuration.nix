@@ -66,7 +66,7 @@
       pulse.enable = true;
       wireplumber.enable = true;
     };
-    xserver.enable = lib.mkForce false; # SDDM chạy Wayland, không cần X stack
+    xserver.enable = lib.mkForce false;
     thermald.enable = true;
     flatpak.enable = true;
     cloudflare-warp.enable = true;
@@ -125,7 +125,6 @@
     # XCURSOR_THEME/SIZE không khai ở đây nữa -> home.pointerCursor (home.nix)
     # đã tự set 2 biến này cho user session, tránh trùng lặp.
   };
-
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
   environment.systemPackages = with pkgs; [

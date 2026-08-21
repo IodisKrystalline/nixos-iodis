@@ -23,9 +23,9 @@ let
       left-handed = config.services.libinput.mouse.leftHanded;
     };
     keyboard.keymap_layout = "us";
-    shell = {
-      cursor-theme = "Adwaita";
-      cursor-size = 24;
+    cursors = {
+      theme = "Adwaita";
+      size = 24;
     };
   };
 in
@@ -38,16 +38,10 @@ in
       kdePackages.qt5compat
       kdePackages.qtsvg
       kdePackages.qtwayland
-      adwaita-icon-theme
     ];
     wayland = {
       enable = true;
-      # weston kiosk thay vì compositor mặc định: astronaut-theme cần cursor
-      # theme tường minh (Adwaita), mặc định greeter Wayland không tự hiện
-      # cursor -> đây là fix, không phải tuỳ chọn thẩm mỹ.
-      compositorCommand =
-        "env XCURSOR_THEME=Adwaita XCURSOR_SIZE=24 XCURSOR_PATH=/run/current-system/sw/share/icons "
-        + "${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
+      compositorCommand = "env XCURSOR_THEME=Adwaita XCURSOR_SIZE=24 XCURSOR_PATH=/run/current-system/sw/share/icons ${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
     };
     settings = {
       General.InputMethod = "";
@@ -58,4 +52,8 @@ in
       };
     };
   };
+  environment.systemPackages = with pkgs; [ 
+      sddm-astronaut
+      adwaita-icon-theme
+    ];
 }

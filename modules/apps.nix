@@ -1,6 +1,12 @@
 { pkgs, ... }:
 
 {
+  programs.caelestia = {
+    enable = true;
+    systemd.enable = false;
+    cli.enable = true;
+  };
+  
   programs.java = {
     enable = true;
     package = pkgs.jdk21;
