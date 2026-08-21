@@ -1,26 +1,10 @@
 { config, lib, pkgs, inputs, ... }:
 
-let
-  sddm-astronaut = (pkgs.sddm-astronaut.override {
-#    embeddedTheme = "japanese_aesthetic";
-    themeConfig = {
-      HeaderTextColor = "#ff00aa";
-      Background = "Backgrounds/your-custom-background.png";
-      PartialBlur = "true";
-          BlurMax = "25";
-          Blur = "1.0";
-    };
-  }).overrideAttrs (oldAttrs: {
-    installPhase = oldAttrs.installPhase + ''
-      chmod u+w $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/
-      cp ${./assets/background.png} \
-        $out/share/sddm/themes/sddm-astronaut-theme/Backgrounds/your-custom-background.png
-    '';
-  });
-in
-
 {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    ./modules/sddm.nix
+  ];
 
   # --- Boot ---
   boot.loader = {
@@ -82,54 +66,15 @@ in
       pulse.enable = true;
       wireplumber.enable = true;
     };
-    displayManager.sddm = {
-      enable = true;
-      wayland = {
-        enable = true;
-        compositorCommand =
-            let
-              westonIni = (pkgs.formats.ini { }).generate "weston.ini" {
-                libinput = {
-                  enable-tap = config.services.libinput.mouse.tapping;
-                  left-handed = config.services.libinput.mouse.leftHanded;
-                };
-                keyboard.keymap_layout = "us";
-                shell = {
-                  cursor-theme = "Adwaita";
-                  cursor-size = 24;
-                };
-              };
-            in
-            "env XCURSOR_THEME=Adwaita XCURSOR_SIZE=24 XCURSOR_PATH=/run/current-system/sw/share/icons ${pkgs.weston}/bin/weston --shell=kiosk -c ${westonIni}";
-      };
-      theme = "sddm-astronaut-theme";
-      extraPackages = with pkgs; [ 
-        sddm-astronaut
-        kdePackages.qt5compat
-        kdePackages.qtsvg
-        kdePackages.qtwayland
-        adwaita-icon-theme
-      ];
-      settings = {
-        General = {
-          InputMethod = "";
-        };
-        Theme = {
-          CursorTheme = "Adwaita";
-          CursorSize = 24;
-          Background = "/etc/nixos/assets/background.png";
-        };
-      };
-    };
-    xserver.enable = lib.mkForce false;
+    xserver.enable = lib.mkForce false; # SDDM chạy Wayland, không cần X stack
     thermald.enable = true;
     flatpak.enable = true;
     cloudflare-warp.enable = true;
     logind.settings.Login.KillUserProcesses = true;
   };
   systemd.services = {
-    cloudflare-warp.wantedBy = lib.mkForce [];
-    libvirtd.wantedBy = lib.mkForce [];
+    cloudflare-warp.wantedBy = lib.mkForce [ ];
+    libvirtd.wantedBy = lib.mkForce [ ];
   };
   security = {
     rtkit.enable = true;
@@ -164,10 +109,7 @@ in
   # --- Gaming & Graphics ---
   hardware.graphics = {
     enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      vpl-gpu-rt
-    ];
+    extraPackages = with pkgs; [ intel-media-driver vpl-gpu-rt ];
   };
   programs.gamemode.enable = true;
 
@@ -180,11 +122,10 @@ in
   environment.sessionVariables = {
     QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
-    XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "24";
+    # XCURSOR_THEME/SIZE không khai ở đây nữa -> home.pointerCursor (home.nix)
+    # đã tự set 2 biến này cho user session, tránh trùng lặp.
   };
 
-  # --- Fonts & Packages ---
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
   environment.systemPackages = with pkgs; [
@@ -200,17 +141,13 @@ in
     uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent
     # Niri ecosystem
     noctalia-shell
-    # SDDM
-    libsForQt5.qtwayland kdePackages.qt5compat 
-    kdePackages.qtsvg sddm-astronaut kdePackages.qtwayland
     # Utils
-    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard 
+    wireplumber brightnessctl ntfs3g imv mpv wl-clipboard
     libnotify upower grimblast cloudflare-warp
   ];
 
   # --- Nix ---
   nixpkgs.config.allowUnfree = true;
-
   nix = {
     settings = {
       experimental-features = [ "nix-command" "flakes" ];

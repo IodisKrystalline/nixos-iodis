@@ -8,7 +8,6 @@ in
   imports = [
     ./modules/theme.nix
     ./modules/terminal.nix
-    ./modules/battery.nix
     ./modules/apps.nix
     inputs.caelestia-shell.homeManagerModules.default
   ];

@@ -7,9 +7,9 @@
   };
 
   programs.git = {
-  enable = true;
-  settings.user.name  = "iodis";
-  settings.user.email = "iodis@example.com";
+    enable = true;
+    settings.user.name = "iodis";
+    settings.user.email = "iodis@example.com";
   };
 
   xdg.desktopEntries = {
