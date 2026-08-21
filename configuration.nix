@@ -122,8 +122,6 @@
   environment.sessionVariables = {
     QT_IM_MODULE = "fcitx";
     XMODIFIERS = "@im=fcitx";
-    # XCURSOR_THEME/SIZE không khai ở đây nữa -> home.pointerCursor (home.nix)
-    # đã tự set 2 biến này cho user session, tránh trùng lặp.
   };
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
 
@@ -137,7 +135,7 @@
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     thunar thunar-volman yazi
     # Hyprland ecosystem
-    uwsm hyprpicker hyprcursor hyprland-qt-support hyprpolkitagent
+    uwsm hyprland-qt-support hyprpolkitagent
     # Niri ecosystem
     noctalia-shell
     # Utils

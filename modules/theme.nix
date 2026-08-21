@@ -7,6 +7,16 @@
     gtk-engine-murrine
     hicolor-icon-theme
   ];
+  home.sessionVariables = {
+    XCURSOR_THEME = "Adwaita";
+    XCURSOR_SIZE = "15";
+  };
+  home.pointerCursor = {
+    enable = true;
+    name = "Adwaita";
+    package = pkgs.adwaita-icon-theme;
+    size = 15;
+  };
 
   gtk = {
     enable = true;
@@ -16,14 +26,14 @@
     cursorTheme = {
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
-      size = 24;
+      size = 15;
     };
     gtk4.theme = config.gtk.theme;
 
     gtk3.extraCss = ''
       label, entry, textview text, treeview, .title, .subtitle { color: #FF10F0; }
-      .dim-label, .caption, entry placeholder, GtkPlacesSidebar { color: #FFB3D9; }
-      statusbar, .accent, GtkStatusbar { color: #8b36f9; }
+      .dim-label, .caption, entry placeholder, GtkPlacesSidebar { color: #ff84c2; }
+      statusbar, .accent, GtkStatusbar { color: #8c1ad7; }
     '';
     gtk4.extraCss = config.gtk.gtk3.extraCss;
   };
@@ -35,9 +45,4 @@
 
   xdg.dataFile."icons/besgnulinux-mono-pink".source =
     config.lib.file.mkOutOfStoreSymlink "/etc/nixos/assets/besgnulinux-mono-pink";
-
-  home.sessionVariables = {
-    XCURSOR_THEME = "Adwaita";
-    XCURSOR_SIZE = "24";
-  };
 }

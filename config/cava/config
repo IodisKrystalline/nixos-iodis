@@ -24,11 +24,11 @@ gradient_count = 8
 gradient_color_1 = '#f450fa'
 gradient_color_2 = '#f311ff'
 gradient_color_3 = '#a600ff'
-gradient_color_4 = '#ff2af1'
-gradient_color_5 = '#ff31ee'
+gradient_color_4 = '#bc2aff'
+gradient_color_5 = '#d631ff'
 gradient_color_6 = '#ff44fc'
 gradient_color_7 = '#ff58ca'
-gradient_color_8 = '#e53aff'
+gradient_color_8 = '#ff3ad1'
 
 [smoothing]
 # Noise reduction (0-100) - higher = smoother but less responsive

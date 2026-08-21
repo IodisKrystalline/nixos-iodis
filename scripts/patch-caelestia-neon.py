@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Patch scheme.json cua caelestia sang Neon Pink/Purple + nen den tim than.
-Chay lai sau moi lan `caelestia scheme set` (lenh do reset file ve mac dinh)."""
 import json
 import os
 

@@ -17,19 +17,10 @@ in
   home.stateVersion = "25.05";
   home.enableNixpkgsReleaseCheck = false;
 
-  home.packages = with pkgs; [ ripgrep nil nixpkgs-fmt python3 tree appimage-run ];
+  home.packages = with pkgs; [ nil nixpkgs-fmt ripgrep python3 appimage-run ];
   home.activation.cleanBrokenSymlinks = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
     $DRY_RUN_CMD find "$HOME/.config" -xtype l -delete 2>/dev/null || true
   '';
-
-  home.pointerCursor = {
-    enable = true;
-    name = "Adwaita";
-    package = pkgs.adwaita-icon-theme;
-    size = 24;
-    gtk.enable = true;
-    x11.enable = true;
-  };
 
   xdg.configFile = lib.genAttrs dotfileNames (name: {
     source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/${name}";
