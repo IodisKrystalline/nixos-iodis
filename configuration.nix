@@ -7,23 +7,25 @@
   ];
 
   # --- Boot ---
-  boot.loader = {
-    efi.canTouchEfiVariables = true;
-    timeout = 5;
-    grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
-      efiInstallAsRemovable = false;
-      useOSProber = true;
-      theme = pkgs.catppuccin-grub.overrideAttrs (old: {
-        postInstall = ''
-          ${old.postInstall or ""}
-          find $out -type f -name "background.png" -exec cp ${./assets/background.png} {} \;
-          find $out -type f -name "logo.png" -delete
-          find $out -type f -name "theme.txt" -exec sed -i '/logo/Id' {} \;
-        '';
-      });
+  boot = { 
+    loader = {
+      efi.canTouchEfiVariables = true;
+      timeout = 5;
+      grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+        efiInstallAsRemovable = false;
+        useOSProber = true;
+        theme = pkgs.catppuccin-grub.overrideAttrs (old: {
+          postInstall = ''
+            ${old.postInstall or ""}
+            find $out -type f -name "background.png" -exec cp ${./assets/background.png} {} \;
+            find $out -type f -name "logo.png" -delete
+            find $out -type f -name "theme.txt" -exec sed -i '/logo/Id' {} \;
+          '';
+        });
+      };
     };
   };
   boot.supportedFilesystems = [ "ntfs" ];

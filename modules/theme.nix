@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     adwaita-icon-theme
     gnome-themes-extra
-    gtk-engine-murrine
+    adw-gtk3
     hicolor-icon-theme
   ];
   home.sessionVariables = {
@@ -20,8 +20,8 @@
 
   gtk = {
     enable = true;
-    theme.name = "Dracula";
-    theme.package = pkgs.dracula-theme;
+    theme.name = "adw-gtk3-dark";
+    theme.package = pkgs.adw-gtk3;
     iconTheme.name = "besgnulinux-mono-pink";
     cursorTheme = {
       name = "Adwaita";
@@ -31,9 +31,9 @@
     gtk4.theme = config.gtk.theme;
 
     gtk3.extraCss = ''
-      label, entry, textview text, treeview, .title, .subtitle { color: #FF10F0; }
-      .dim-label, .caption, entry placeholder, GtkPlacesSidebar { color: #ff84c2; }
-      statusbar, .accent, GtkStatusbar { color: #8c1ad7; }
+      label, entry, textview text, treeview, .title, .subtitle { color: #FF10F0 !important; }
+      .dim-label, .caption, entry placeholder, GtkPlacesSidebar { color: #ff84c2 !important; }
+      statusbar, .accent, GtkStatusbar { color: #8c1ad7 !important; }
     '';
     gtk4.extraCss = config.gtk.gtk3.extraCss;
   };
