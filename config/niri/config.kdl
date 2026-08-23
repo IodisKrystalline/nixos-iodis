@@ -49,8 +49,8 @@ layout {
 
     focus-ring {
         on
-        width 3
-        active-color "#FF0066"
+        width 2
+        active-color "#ff00c0"
     }
 
     border {
