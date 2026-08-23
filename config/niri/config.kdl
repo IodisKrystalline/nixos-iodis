@@ -48,10 +48,9 @@ layout {
     default-column-width { proportion 0.65; }
 
     focus-ring {
-        off
-        width 4
-        active-color "#FF0066"    // Neon Pink — Main
-        inactive-color "#4B0082"  // Tím đậm — khớp tông Sub trong theme GTK/Caelestia
+        on
+        width 3
+        active-color "#FF0066"
     }
 
     border {
@@ -82,6 +81,7 @@ prefer-no-csd
 window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
+    draw-border-with-background false
 }
 
 window-rule {
