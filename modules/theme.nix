@@ -41,10 +41,6 @@
       package = pkgs.adwaita-icon-theme;
       size = 15;
     };
-    font = {
-      name = "JetBrainsMono Nerd Font";
-      size = 11;
-    };
 
     # ====================== CSS NEON PINK ======================
     gtk3.extraCss = ''
