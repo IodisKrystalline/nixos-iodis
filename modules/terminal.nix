@@ -4,9 +4,9 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      nixos-rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
       caelestia-neon = "caelestia scheme set -n dracula -m dark; and python3 /etc/nixos/scripts/patch-caelestia-neon.py; and sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
-      deepclean = "sudo /etc/nixos/scripts/deepclean.sh";
+      clean = "sudo /etc/nixos/scripts/deepclean.sh";
     };
     interactiveShellInit = ''
       set -g fish_greeting ""

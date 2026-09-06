@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-{
+{  
   programs.caelestia = {
     enable = true;
     systemd.enable = false;
@@ -34,7 +34,17 @@
       terminal = false;
       categories = [ "Game" ];
     };
+    vi-ime = {
+      name = "vi-ime";
+      genericName = "Vietnamese Input Method";
+      exec = "appimage-run /home/iodis/Downloads/vi-ime-7.3.5-x86_64.AppImage";
+      terminal = false;
+      categories = [ "Utility" ];
+    };
   };
+  home.packages = [ pkgs.libayatana-appindicator ];
+  home.sessionVariables.LD_LIBRARY_PATH =
+    "${pkgs.libayatana-appindicator}/lib:$LD_LIBRARY_PATH";
 
   xdg.mimeApps = {
     enable = true;

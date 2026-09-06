@@ -30,14 +30,18 @@ switch-events {
 // ==============================================================================
 spawn-at-startup "dbus-update-activation-environment" "--systemd" "WAYLAND_DISPLAY" "XDG_CURRENT_DESKTOP=niri"
 spawn-at-startup "noctalia-shell"
+spawn-at-startup "hyprpolkitagent"
 
 // ==============================================================================
 // Layout & Theme
 // ==============================================================================
 layout {
-    gaps 16
+    gaps 10
     center-focused-column "on-overflow"
     background-color "transparent"
+    insert-hint {
+        off
+    }
 
     preset-column-widths {
         proportion 0.33333

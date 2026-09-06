@@ -44,7 +44,7 @@
   # --- Users & Shell ---
   users.users.iodis = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "gamemode" ];
+    extraGroups = [ "wheel" "gamemode" "libvirtd" ];
     shell = pkgs.fish;
   };
   programs.fish.enable = true;
@@ -117,15 +117,24 @@
 
   # --- Input Method (Fcitx5) ---
   i18n.inputMethod = {
-    enable = true;
+    enable = false;
     type = "fcitx5";
     fcitx5.addons = with pkgs; [ qt6Packages.fcitx5-unikey fcitx5-gtk kdePackages.fcitx5-qt ];
   };
-  environment.sessionVariables = {
-    QT_IM_MODULE = "fcitx";
-    XMODIFIERS = "@im=fcitx";
-  };
+#  environment.sessionVariables = {
+#    QT_IM_MODULE = "fcitx";
+#    XMODIFIERS = "@im=fcitx";
+#  };
   fonts.packages = with pkgs; [ nerd-fonts.jetbrains-mono ];
+
+  # --- File Manager ---
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
 
   environment.systemPackages = with pkgs; [
     # Terminal & tools
@@ -135,14 +144,13 @@
     micro git wget vscodium
     # Browser & file manager
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    thunar thunar-volman yazi
-    # Hyprland ecosystem
+    yazi
+    # Hyprland & Niri ecosystem
     uwsm hyprland-qt-support hyprpolkitagent
-    # Niri ecosystem
     noctalia-shell
     # Utils
     wireplumber brightnessctl ntfs3g imv mpv wl-clipboard
-    libnotify upower grimblast cloudflare-warp
+    libnotify upower grimblast cloudflare-warp file-roller unzip
   ];
 
   # --- Nix ---
