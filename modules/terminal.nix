@@ -4,7 +4,7 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
+      nixos-rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
       caelestia-neon = "caelestia scheme set -n dracula -m dark; and python3 /etc/nixos/scripts/patch-caelestia-neon.py; and sudo nixos-rebuild switch --flake /etc/nixos#iodis-nix";
       clean = "sudo /etc/nixos/scripts/deepclean.sh";
     };

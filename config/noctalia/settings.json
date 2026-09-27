@@ -25,7 +25,7 @@
         "showIconBackground": false,
         "sortByMostUsed": true,
         "terminalCommand": "alacritty -e",
-        "viewMode": "list"
+        "viewMode": "grid"
     },
     "audio": {
         "mprisBlacklist": [
@@ -50,7 +50,7 @@
         "density": "comfortable",
         "displayMode": "always_visible",
         "enableExclusionZoneInset": true,
-        "fontScale": 1.13,
+        "fontScale": 1.2000000000000002,
         "frameRadius": 12,
         "frameThickness": 8,
         "hideOnOverview": true,
@@ -75,7 +75,7 @@
         "showOnWorkspaceSwitch": true,
         "showOutline": false,
         "useSeparateOpacity": true,
-        "widgetSpacing": 10,
+        "widgetSpacing": 6,
         "widgets": {
             "center": [
                 {
@@ -86,7 +86,7 @@
                     "scrollingMode": "hover",
                     "showIcon": true,
                     "showText": true,
-                    "textColor": "none",
+                    "textColor": "primary",
                     "useFixedWidth": false
                 }
             ],
@@ -100,6 +100,10 @@
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": true
+                },
+                {
+                    "iconColor": "primary",
+                    "id": "WallpaperSelector"
                 },
                 {
                     "characterCount": 2,
@@ -297,7 +301,7 @@
         "animationDisabled": false,
         "animationSpeed": 1,
         "autoStartAuth": false,
-        "avatarImage": "/home/iodis/.face",
+        "avatarImage": "/home/iodis/K/Media/Niko.jpg",
         "boxRadiusRatio": 1,
         "clockFormat": "hh\\nmm",
         "clockStyle": "analog",
