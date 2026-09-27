@@ -144,7 +144,7 @@
     micro git wget vscodium
     # Browser & file manager
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-    yazi luakit
+    yazi
     # Hyprland & Niri ecosystem
     uwsm hyprland-qt-support hyprpolkitagent
     noctalia-shell

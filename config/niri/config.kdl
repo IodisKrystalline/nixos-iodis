@@ -170,7 +170,7 @@ binds {
     Mod+Grave { spawn-sh "noctalia-shell ipc call launcher toggle"; }
     Mod+KP_Subtract { spawn-sh "uwsm app -- fcitx5 -d -r"; }
     Mod+Escape { spawn-sh "noctalia-shell ipc call lockScreen lock"; }
-    Mod+P { spawn "codium"; }
+    Mod+P { spawn-sh "codium --disable-features=WaylandFractionalScaleV1"; }
     Print { "screenshot"; }
     Ctrl+Alt+Delete { spawn "shutdown" "now"; }
 
